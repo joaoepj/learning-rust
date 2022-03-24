@@ -7,6 +7,9 @@
 // or $ ENV_VAR=abc ./target/debug/learning-rust
 // issue $ echo $? immediatly after running learning-rust to check proccess exit code.
 
+#![warn(dead_code)]
+
+
 // 1. fixing error: use of undeclared crate or module `env`
 use std::{
     env::var
@@ -15,9 +18,19 @@ use std::{
 // 2. fixing error: ENV_VAR not found in this scope
 const ENV_VAR: &str = "ENV_VAR";
 
+
+
 pub fn run() {
     // 3. unfixed error: cannot infer type for type parameter `T` declared on the trait
     // commenting out .into() fixed this error
     // function into seems to convert string to array of bytes     
     var(ENV_VAR).expect("missing ENV_VAR");//.into();
+}
+
+pub fn unwrap(key: &str){
+    match var(key) {
+        Ok(val) => println!("{}: {:?}", key, val),
+        //Err(e) => println!("couldn't interpret {:?}: {:?}", key, e),
+        Err(_e) => print!("{}", "")
+    }
 }
