@@ -27,10 +27,10 @@ pub fn run() {
     var(ENV_VAR).expect("missing ENV_VAR");//.into();
 }
 
-pub fn unwrap(key: &str){
+pub fn unwrap(key: &str)  {
     match var(key) {
         Ok(val) => println!("{}: {:?}", key, val),
         //Err(e) => println!("couldn't interpret {:?}: {:?}", key, e),
-        Err(_e) => print!("{}", "")
+        Err(e) => print!("")
     }
 }

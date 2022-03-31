@@ -1,13 +1,51 @@
-//mod url_host;
-mod env_var;
-
-fn main() {
+/*
+mod url_host;
     //url_host::run();
     //env_var::run();
-    //very disapointinh I really give up of this if (at lest for now)
-    // Why this fucking unit `()` always appears?
-    // I need to elegantly get rid of it
+
+    The idea is organize the code into modules
+    to be called by CLI switches or provide
+    service to each other.
+
+*/
+mod env_var;
+
+use serde::Deserialize;
+
+
+#[derive(Debug,Deserialize)]
+struct Library {
+    books: Vec<Books>,
+}
+
+#[derive(Debug,Deserialize)]
+struct Books {
+    title: String,
+    author: String,
+    edition: Option<String>,
+    pages: Option<i16>,
+}
+
+
+fn main() {
+
+    
+    let library: Library = toml::from_str(r#"
+        [[books]]
+        title = "B"
+        author = "A"
+        edition = "1ª"
+        pages = 2022
+        [[books]]
+        title = "C"
+        author = "D"
+      
+        "#).unwrap();
+
+        println!("{:#?}", library);
+        
         println!("{:#?}", env_var::unwrap("ENV_VAR"));
+        
     
     
 }
