@@ -1,0 +1,11 @@
+# This is an example file
+# of how represent a Library struct
+# in the toml format
+[[books]]
+title = "B"
+author = "A"
+edition = "1ª"
+pages = 2022
+[[books]]
+title = "C"
+author = "D"

@@ -11,7 +11,7 @@ mod url_host;
 mod env_var;
 
 use serde::Deserialize;
-
+use std::fs;
 
 #[derive(Debug,Deserialize)]
 struct Library {
@@ -28,24 +28,9 @@ struct Books {
 
 
 fn main() {
-
-    
-    let library: Library = toml::from_str(r#"
-        [[books]]
-        title = "B"
-        author = "A"
-        edition = "1ª"
-        pages = 2022
-        [[books]]
-        title = "C"
-        author = "D"
-      
-        "#).unwrap();
-
-        println!("{:#?}", library);
-        
-        println!("{:#?}", env_var::unwrap("ENV_VAR"));
-        
-    
-    
+    let content = fs::read_to_string("../../src/library.example")
+        .expect("Something went wrong reading the file");
+    let library: Library = toml::from_str(content.as_str()).unwrap();
+    println!("{:#?}", library);
+    println!("{:#?}", env_var::unwrap("ENV_VAR"));
 }
