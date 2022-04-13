@@ -12,14 +12,11 @@ mod env_var;
 mod assert_test;
 mod codec_demo;
 mod cli;
+mod cfg_from_file;
 
 
 use tokio::net::{TcpListener, TcpStream};
 use mini_redis::{Connection, Frame};
-
-
-use serde::Deserialize;
-use std::fs;
 use clap::Parser;
 
 
@@ -28,18 +25,6 @@ use clap::Parser;
 
 
 
-#[derive(Debug,Deserialize)]
-struct Library {
-    books: Vec<Books>,
-}
-
-#[derive(Debug,Deserialize)]
-struct Books {
-    title: String,
-    author: String,
-    edition: Option<String>,
-    pages: Option<i16>,
-}
 
 
 fn main() {
@@ -49,10 +34,7 @@ fn main() {
     // matches just as you would the top level cmd
     match &cli.command {
         cli::Commands::CfgFromToml => {
-            let content = fs::read_to_string("../../src/library.example")
-                .expect("Something went wrong reading the file");
-            let library: Library = toml::from_str(content.as_str()).unwrap();
-            println!("{:#?}", library);
+            cfg_from_file::read_from_file("../../src/library.example".into())
         }
         cli::Commands::EnvVar => {
            println!("{:#?}", env_var::unwrap("ENV_VAR"));
