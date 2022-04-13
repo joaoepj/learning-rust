@@ -11,3 +11,5 @@ toml = "0.5"
 parity-scale-codec = "3.1.2"           # SCALE - Simple Concatenating Aggregated Little Endians
 parity-scale-codec-derive = "3.1.2"    # Serialization and deserialization derive macro for Parity SCALE Codec
 clap = { version = "3.1.8", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+mini-redis = "0.4"
