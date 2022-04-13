@@ -11,6 +11,8 @@ mod url_host;
 mod env_var;
 mod assert_test;
 mod codec_demo;
+mod cli;
+
 
 use tokio::net::{TcpListener, TcpStream};
 use mini_redis::{Connection, Frame};
@@ -18,33 +20,10 @@ use mini_redis::{Connection, Frame};
 
 use serde::Deserialize;
 use std::fs;
-use clap::{Parser, Subcommand};
+use clap::Parser;
 
 
-/// Simple program to greet a person
-#[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
-struct Cli {
-    //
-    #[clap(subcommand)]
-    command: Commands,
-}
 
-#[derive(Debug,Subcommand)]
-enum Commands {
-    /// Read config from toml file
-    CfgFromToml,
-    /// Read config from environment variables
-    EnvVar,
-    /// Test Parity Scale CODEC
-    CodecDemo,
-    /// Test assert
-    Assert,
-    /// Mini redis client built with tokio async library
-    TokioMrCli,
-    /// Mini redis server built with tokio async library
-    TokioMrSrv
-}
 
 
 
@@ -64,33 +43,33 @@ struct Books {
 
 
 fn main() {
-    let cli = Cli::parse();
+    let cli = cli::Cli::parse();
 
     // You can check for the existence of subcommands, and if found use their
     // matches just as you would the top level cmd
     match &cli.command {
-        Commands::CfgFromToml => {
+        cli::Commands::CfgFromToml => {
             let content = fs::read_to_string("../../src/library.example")
                 .expect("Something went wrong reading the file");
             let library: Library = toml::from_str(content.as_str()).unwrap();
             println!("{:#?}", library);
         }
-        Commands::EnvVar => {
+        cli::Commands::EnvVar => {
            println!("{:#?}", env_var::unwrap("ENV_VAR"));
         }
-        Commands::CodecDemo => {
+        cli::Commands::CodecDemo => {
            codec_demo::run();
         }
-        Commands::Assert => {
+        cli::Commands::Assert => {
            println!("Assert: {:#?}",assert_test::run());
         }
-        Commands::TokioMrCli => {
+        cli::Commands::TokioMrCli => {
            let mut rt = tokio::runtime::Runtime::new().unwrap();
                     rt.block_on(async {
                     println!("Aqui é tokio rapah!!!");
                 })
         }
-        Commands::TokioMrSrv => {
+        cli::Commands::TokioMrSrv => {
            let mut rt = tokio::runtime::Runtime::new().unwrap();
                     rt.block_on(async {
                         let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
